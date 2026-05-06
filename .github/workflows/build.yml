@@ -21,20 +21,22 @@ jobs:
       - name: Build project
         run: ./mvnw clean package -DskipTests
 
-      - name: SAST (Semgrep or existing tool)
-        run: echo "SAST step already configured"
+      - name: SAST step
+        run: echo "SAST already configured in previous practice"
 
-      - name: Run SCA Dependency Check
+      - name: Run SCA analysis (OWASP Dependency-Check)
         run: ./mvnw org.owasp:dependency-check-maven:check -Dformat=HTML -DautoUpdate=false
 
       - name: Upload SCA report
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: sca-report
           path: target/dependency-check-report.*
 
       - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: jar-file
           path: target/*.jar
