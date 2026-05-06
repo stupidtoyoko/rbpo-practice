@@ -5,7 +5,6 @@ on:
     branches: [ main ]
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
 
@@ -22,38 +21,8 @@ jobs:
       - name: Build project
         run: ./mvnw clean package -DskipTests
 
-      - name: Upload JAR artifact
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: jar-file
-          path: target/*.jar
-
-
-  sast:
-    runs-on: ubuntu-latest
-    container:
-      image: eclipse-temurin:21-jdk
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
       - name: SAST step
         run: echo "SAST already configured in previous practice"
-
-
-  sca:
-    runs-on: ubuntu-latest
-    container:
-      image: eclipse-temurin:21-jdk
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Make mvnw executable
-        run: chmod +x mvnw
 
       - name: Run SCA analysis (OWASP Dependency-Check)
         run: ./mvnw org.owasp:dependency-check-maven:check -Dformat=HTML -DautoUpdate=false
@@ -64,3 +33,10 @@ jobs:
         with:
           name: sca-report
           path: target/dependency-check-report.*
+
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jar-file
+          path: target/*.jar
