@@ -1,0 +1,27 @@
+stages:
+  - build
+  - test
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+build:
+  stage: build
+  image: eclipse-temurin:21-jdk
+  script:
+    - chmod +x mvnw
+    - ./mvnw clean package
+  artifacts:
+    paths:
+      - target/*.jar
+
+sast:
+  stage: test
+  image: returntocorp/semgrep
+  script:
+    - semgrep --config=auto --json --output=report.json .
+  artifacts:
+    when: always
+    paths:
+      - report.json
