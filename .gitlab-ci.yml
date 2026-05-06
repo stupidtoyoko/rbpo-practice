@@ -25,3 +25,13 @@ sast:
     when: always
     paths:
       - report.json
+
+sca:
+  stage: test
+  image: eclipse-temurin:21-jdk
+  script:
+    - chmod +x mvnw
+    - ./mvnw org.owasp:dependency-check-maven:check -Dformat=HTML -DoutputDirectory=target/sca
+  artifacts:
+    paths:
+      - target/sca/*.html
