@@ -1,0 +1,88 @@
+bcba5e7 Удалён вложенный репозиторий
+.github/workflows/ci.yml
+.gitlab-ci.yml
+rbpo-practice/.gitignore
+rbpo-practice/.gitlab-ci.yml
+rbpo-practice/.mvn/wrapper/maven-wrapper.properties
+rbpo-practice/mvnw
+rbpo-practice/mvnw.cmd
+rbpo-practice/pom.xml
+rbpo-practice/src/main/java/ru/mtuci/coursemanagement/CourseManagementApplication.java
+rbpo-practice/src/main/java/ru/mtuci/coursemanagement/config/WebConfig.java
+rbpo-practice/src/main/java/ru/mtuci/coursemanagement/controller/AuthController.java
+rbpo-practice/src/main/java/ru/mtuci/coursemanagement/controller/CourseController.java
+rbpo-practice/src/main/java/ru/mtuci/coursemanagement/controller/IndexController.java
+rbpo-practice/src/main/java/ru/mtuci/coursemanagement/controller/ProxyController.java
+rbpo-practice/src/main/java/ru/mtuci/coursemanagement/controller/StudentController.java
+rbpo-practice/src/main/java/ru/mtuci/coursemanagement/controller/XmlController.java
+rbpo-practice/src/main/java/ru/mtuci/coursemanagement/model/Course.java
+rbpo-practice/src/main/java/ru/mtuci/coursemanagement/model/Student.java
+rbpo-practice/src/main/java/ru/mtuci/coursemanagement/model/User.java
+rbpo-practice/src/main/java/ru/mtuci/coursemanagement/repository/CourseRepository.java
+rbpo-practice/src/main/java/ru/mtuci/coursemanagement/repository/StudentRepository.java
+rbpo-practice/src/main/java/ru/mtuci/coursemanagement/repository/UserRepository.java
+rbpo-practice/src/main/java/ru/mtuci/coursemanagement/service/CourseService.java
+rbpo-practice/src/main/java/ru/mtuci/coursemanagement/service/PluginLoader.java
+rbpo-practice/src/main/java/ru/mtuci/coursemanagement/service/UserService.java
+rbpo-practice/src/main/resources/application.yaml
+rbpo-practice/src/main/resources/data.sql
+rbpo-practice/src/main/resources/templates/courses.html
+rbpo-practice/src/main/resources/templates/index.html
+rbpo-practice/src/main/resources/templates/login.html
+rbpo-practice/src/main/resources/templates/students.html
+
+a55143b Добавлен SAST Semgrep
+README.md
+
+152c2d8 Добавлен SAST Semgrep в CI/CD
+.github/workflows/build.yml
+.gitlab-ci.yml
+
+d657732 Добавлен GitLab CI для сборки проекта
+.gitlab-ci.yml
+
+b21bedd Добавлен GitHub Actions workflow для сборки проекта
+.github/workflows/build.yml
+
+e8a687d Исправлены тесты директория
+src/main/tests/java/ru/mtuci/coursemanagement/CourseManagementApplicationTests.java
+
+fe7522e Добавленные тесты
+.gitattributes
+rbpo-practice
+src/main/test/java/ru/mtuci/coursemanagement/CourseManagementApplicationTests.java
+
+f07d629 Merge branch 'feature-students'
+7c5d511 Добавлен модуль студентов
+src/main/java/ru/mtuci/coursemanagement/controller/StudentController.java
+src/main/java/ru/mtuci/coursemanagement/model/Student.java
+src/main/java/ru/mtuci/coursemanagement/repository/StudentRepository.java
+
+74217b6 Добавлен модуль курсов
+src/main/java/ru/mtuci/coursemanagement/controller/CourseController.java
+src/main/java/ru/mtuci/coursemanagement/model/Course.java
+src/main/java/ru/mtuci/coursemanagement/repository/CourseRepository.java
+src/main/java/ru/mtuci/coursemanagement/service/CourseService.java
+
+a91f0d6 Добавлена авторизация
+.gitignore
+.mvn/wrapper/maven-wrapper.properties
+mvnw
+mvnw.cmd
+pom.xml
+src/main/java/ru/mtuci/coursemanagement/CourseManagementApplication.java
+src/main/java/ru/mtuci/coursemanagement/config/WebConfig.java
+src/main/java/ru/mtuci/coursemanagement/controller/AuthController.java
+src/main/java/ru/mtuci/coursemanagement/controller/IndexController.java
+src/main/java/ru/mtuci/coursemanagement/controller/ProxyController.java
+src/main/java/ru/mtuci/coursemanagement/controller/XmlController.java
+src/main/java/ru/mtuci/coursemanagement/model/User.java
+src/main/java/ru/mtuci/coursemanagement/repository/UserRepository.java
+src/main/java/ru/mtuci/coursemanagement/service/PluginLoader.java
+src/main/java/ru/mtuci/coursemanagement/service/UserService.java
+src/main/resources/application.yaml
+src/main/resources/data.sql
+src/main/resources/templates/courses.html
+src/main/resources/templates/index.html
+src/main/resources/templates/login.html
+src/main/resources/templates/students.html
