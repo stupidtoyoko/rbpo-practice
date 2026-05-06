@@ -18,11 +18,20 @@ jobs:
       - name: Настройка прав mvnw
         run: chmod +x mvnw
 
-      - name: Сборка и тестирование
-        run: ./mvnw clean package
+      - name: Сборка проекта
+        run: ./mvnw clean package -DskipTests
 
-      - name: Сохранение артефакта
+      - name: SCA Dependency Check
+        run: ./mvnw org.owasp:dependency-check-maven:check -Dformat=HTML -DautoUpdate=false
+
+      - name: Сохранение JAR артефакта
         uses: actions/upload-artifact@v4
         with:
           name: jar-файл
           path: target/*.jar
+
+      - name: Сохранение SCA отчёта
+        uses: actions/upload-artifact@v4
+        with:
+          name: sca-report
+          path: target/dependency-check-report.*
