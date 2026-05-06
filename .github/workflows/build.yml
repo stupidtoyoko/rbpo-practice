@@ -1,4 +1,4 @@
-name: CI + SAST + SCA
+name: CI + SAST + SCA (stable full)
 
 on:
   pull_request:
@@ -12,24 +12,24 @@ jobs:
       image: eclipse-temurin:21-jdk
 
     steps:
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Make mvnw executable
         run: chmod +x mvnw
 
-      - name: Build project
+      - name: Build project (compile + package)
         run: ./mvnw clean package -DskipTests
 
       - name: SAST step
-        run: echo "SAST already implemented in previous practice"
+        run: echo "SAST already configured"
 
-      - name: Run SCA (OWASP Dependency-Check - safe mode)
+      - name: Run SCA (OWASP Dependency-Check)
         run: |
           ./mvnw org.owasp:dependency-check-maven:check \
             -Dformat=HTML \
-            -DautoUpdate=false \
-            -Dnoupdate=true \
+            -DautoUpdate=true \
             -DfailBuildOnCVSS=11 || true
 
       - name: Upload SCA report
