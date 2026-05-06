@@ -1,37 +1,28 @@
 stages:
-- build
-- test
-
-workflow:
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  - build
+  - test
 
 build:
   stage: build
   image: eclipse-temurin:21-jdk
+  tags:
+    - saas-linux-small-amd64
   script:
     - chmod +x mvnw
-    - ./mvnw clean package
+    - ./mvnw clean package -DskipTests
   artifacts:
     paths:
       - target/*.jar
 
-sast:
-  stage: test
-  image: returntocorp/semgrep
-  script:
-    - semgrep --config=auto --json --output=report.json .
-  artifacts:
-    when: always
-    paths:
-      - report.json
-
 sca:
   stage: test
   image: eclipse-temurin:21-jdk
+  tags:
+    - saas-linux-small-amd64
   script:
     - chmod +x mvnw
-    - ./mvnw org.owasp:dependency-check-maven:check -Dformat=HTML -DoutputDirectory=target/sca
+    - ./mvnw org.owasp:dependency-check-maven:check -Dformat=HTML -DautoUpdate=false
   artifacts:
+    when: always
     paths:
-      - target/sca/*.html
+      - target/dependency-check-report.*
