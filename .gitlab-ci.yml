@@ -4,25 +4,18 @@ stages:
 
 build:
   stage: build
-  image: eclipse-temurin:21-jdk
-  tags:
-    - saas-linux-small-amd64
   script:
-    - chmod +x mvnw
-    - ./mvnw clean package -DskipTests
+    - mvnw.cmd clean package -DskipTests
   artifacts:
     paths:
       - target/*.jar
 
 sca:
   stage: test
-  image: eclipse-temurin:21-jdk
-  tags:
-    - saas-linux-small-amd64
   script:
-    - chmod +x mvnw
-    - ./mvnw org.owasp:dependency-check-maven:check -Dformat=HTML -DautoUpdate=false
+    - mvnw.cmd org.owasp:dependency-check-maven:check -Dformat=HTML -DautoUpdate=false -DoutputDirectory=target/sca
   artifacts:
     when: always
     paths:
-      - target/dependency-check-report.*
+      - target/sca/
+      - target/dependency-check-report.html

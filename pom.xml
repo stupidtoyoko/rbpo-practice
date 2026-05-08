@@ -103,7 +103,6 @@
                 </configuration>
             </plugin>
 
-            <!-- 🔥 OWASP Dependency Check (SCA) -->
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>

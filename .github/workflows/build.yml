@@ -1,4 +1,4 @@
-name: CI + SAST + SCA (stable full)
+name: CI + SAST + SCA
 
 on:
   pull_request:
