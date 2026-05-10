@@ -1,0 +1,91 @@
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - when: always
+
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  tags:
+    - local
+
+  script:
+    - echo "Building project"
+    - mvn clean package -DskipTests
+
+  artifacts:
+    when: always
+    paths:
+      - target/*.jar
+
+sca:
+  stage: test
+  tags:
+    - local
+
+  script:
+    - echo "Running OWASP dependency check"
+    - mvn org.owasp:dependency-check-maven:check -Dformat=HTML -DfailBuildOnCVSS=7 || true
+
+  artifacts:
+    when: always
+    paths:
+      - target/dependency-check-report.*
+
+dast_baseline:
+  stage: test
+  tags:
+    - local
+
+  image:
+    name: zaproxy/zap-stable
+    entrypoint: [""]
+
+  dependencies:
+    - build
+
+  script:
+    - echo "Starting application"
+    - apt-get update && apt-get install -y openjdk-21-jre || true
+
+    - java -jar target/*.jar &
+    - sleep 25
+
+    - mkdir -p zap
+    - touch zap-rules.tsv
+
+    - zap-baseline.py -t http://localhost:8080 -r zap-baseline-report.html || true
+
+  artifacts:
+    when: always
+    paths:
+      - zap-baseline-report.html
+
+dast_api:
+  stage: test
+  tags:
+    - local
+
+  image:
+    name: zaproxy/zap-stable
+    entrypoint: [""]
+
+  dependencies:
+    - build
+
+  script:
+    - echo "Starting application"
+    - apt-get update && apt-get install -y openjdk-21-jre || true
+
+    - java -jar target/*.jar &
+    - sleep 25
+
+    - zap-api-scan.py -t http://localhost:8080/v3/api-docs -f openapi -r zap-api-report.html || true
+
+  artifacts:
+    when: always
+    paths:
+      - zap-api-report.html
