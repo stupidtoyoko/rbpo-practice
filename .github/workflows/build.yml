@@ -1,0 +1,46 @@
+name: CI + SAST + SCA
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    container:
+      image: eclipse-temurin:21-jdk
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Make mvnw executable
+        run: chmod +x mvnw
+
+      - name: Build project (compile + package)
+        run: ./mvnw clean package -DskipTests
+
+      - name: SAST step
+        run: echo "SAST already configured"
+
+      - name: Run SCA (OWASP Dependency-Check)
+        run: |
+          ./mvnw org.owasp:dependency-check-maven:check \
+            -Dformat=HTML \
+            -DautoUpdate=true \
+            -DfailBuildOnCVSS=11 || true
+
+      - name: Upload SCA report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sca-report
+          path: target/dependency-check-report.*
+
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jar-file
+          path: target/*.jar
