@@ -12,7 +12,6 @@ jobs:
       image: eclipse-temurin:21-jdk
 
     steps:
-
       - name: Checkout repository
         uses: actions/checkout@v4
 

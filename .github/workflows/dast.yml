@@ -9,20 +9,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Download build artifact (jar)
-        uses: actions/download-artifact@v4
-        with:
-          name: jar-file
-          path: target/
 
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 21
+
+      - name: Make mvnw executable
+        run: chmod +x mvnw
+
+      - name: Build project (needed for DAST)
+        run: ./mvnw clean package -DskipTests
 
       - name: Start application
         run: |
