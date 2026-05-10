@@ -21,7 +21,10 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - name: Build project
+      - name: Make mvnw executable
+        run: chmod +x mvnw
+
+      - name: Build project (compile + package)
         run: ./mvnw clean package -DskipTests
 
       - name: Start application
@@ -29,17 +32,17 @@ jobs:
           java -jar target/*.jar > app.log 2>&1 &
           echo $! > app.pid
 
-      - name: Wait for app startup
+      - name: Wait for application startup
         run: |
           for i in {1..30}; do
             if curl -s http://localhost:8080 > /dev/null; then
               echo "Application is up"
               exit 0
             fi
-            echo "Waiting..."
+            echo "Waiting for app..."
             sleep 2
           done
-          echo "App failed to start"
+          echo "Application failed to start"
           exit 1
 
       - name: Create ZAP rules file
