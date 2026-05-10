@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: read
+  issues: none
 
 jobs:
   dast:
@@ -24,7 +25,7 @@ jobs:
       - name: Make mvnw executable
         run: chmod +x mvnw
 
-      - name: Build project (compile + package)
+      - name: Build project
         run: ./mvnw clean package -DskipTests
 
       - name: Start application
@@ -32,14 +33,14 @@ jobs:
           java -jar target/*.jar > app.log 2>&1 &
           echo $! > app.pid
 
-      - name: Wait for application startup
+      - name: Wait for application
         run: |
           for i in {1..30}; do
             if curl -s http://localhost:8080 > /dev/null; then
-              echo "Application is up"
+              echo "Application started"
               exit 0
             fi
-            echo "Waiting for app..."
+            echo "Waiting..."
             sleep 2
           done
           echo "Application failed to start"
