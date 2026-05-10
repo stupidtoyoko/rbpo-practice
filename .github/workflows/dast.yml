@@ -55,7 +55,6 @@ jobs:
           rules_file_name: zap-rules.tsv
           fail_action: false
 
-      # 🟢 API SCAN (НЕ ВАЛИТ PIPELINE)
       - name: ZAP API Scan
         continue-on-error: true
         uses: zaproxy/action-api-scan@v0.10.0
@@ -65,7 +64,6 @@ jobs:
           target: http://localhost:8080/v3/api-docs
           fail_action: false
 
-      # 🟢 ВСЕГДА СОХРАНЯЕМ ОТЧЁТЫ
       - name: Upload DAST reports
         if: always()
         uses: actions/upload-artifact@v4
