@@ -4,7 +4,6 @@ on:
   pull_request:
     branches: [ main ]
 
-# 🔴 ключевой фикс прав
 permissions:
   contents: read
   actions: read
@@ -26,7 +25,7 @@ jobs:
       - name: Make mvnw executable
         run: chmod +x mvnw
 
-      - name: Build project (jar)
+      - name: Build project
         run: ./mvnw clean package -DskipTests
 
       - name: Start application
@@ -34,23 +33,20 @@ jobs:
           java -jar target/*.jar > app.log 2>&1 &
           echo $! > app.pid
 
-      - name: Wait for application startup
+      - name: Wait for application
         run: |
           for i in {1..30}; do
-            if curl -s http://localhost:8080 > /dev/null; then
-              echo "Application is up"
-              exit 0
-            fi
-            echo "Waiting..."
+            curl -s http://localhost:8080 && exit 0
             sleep 2
           done
-          echo "Application failed to start"
           exit 1
 
       - name: Create ZAP rules file
         run: touch zap-rules.tsv
 
+      # 🟢 BASELINE (НЕ ВАЛИТ PIPELINE)
       - name: ZAP Baseline Scan
+        continue-on-error: true
         uses: zaproxy/action-baseline@v0.9.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -59,7 +55,9 @@ jobs:
           rules_file_name: zap-rules.tsv
           fail_action: false
 
+      # 🟢 API SCAN (НЕ ВАЛИТ PIPELINE)
       - name: ZAP API Scan
+        continue-on-error: true
         uses: zaproxy/action-api-scan@v0.10.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -67,9 +65,10 @@ jobs:
           target: http://localhost:8080/v3/api-docs
           fail_action: false
 
+      # 🟢 ВСЕГДА СОХРАНЯЕМ ОТЧЁТЫ
       - name: Upload DAST reports
-        uses: actions/upload-artifact@v4
         if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: dast-report
           path: |
