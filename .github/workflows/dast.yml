@@ -6,7 +6,6 @@ on:
 
 permissions:
   contents: read
-  issues: none
 
 jobs:
   dast:
@@ -33,17 +32,12 @@ jobs:
           java -jar target/*.jar > app.log 2>&1 &
           echo $! > app.pid
 
-      - name: Wait for application
+      - name: Wait for app
         run: |
           for i in {1..30}; do
-            if curl -s http://localhost:8080 > /dev/null; then
-              echo "Application started"
-              exit 0
-            fi
-            echo "Waiting..."
+            curl -s http://localhost:8080 && exit 0
             sleep 2
           done
-          echo "Application failed to start"
           exit 1
 
       - name: Create ZAP rules file
@@ -51,18 +45,24 @@ jobs:
 
       - name: ZAP Baseline Scan
         uses: zaproxy/action-baseline@v0.9.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           target: http://localhost:8080
           rules_file_name: zap-rules.tsv
           fail_action: false
+          allow_issue_writing: false
 
       - name: ZAP API Scan
         uses: zaproxy/action-api-scan@v0.10.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           target: http://localhost:8080/v3/api-docs
           fail_action: false
+          allow_issue_writing: false
 
-      - name: Upload DAST reports
+      - name: Upload reports
         uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -72,7 +72,6 @@ jobs:
             report_json.html
             report_json.json
 
-      - name: Stop application
+      - name: Stop app
         if: always()
-        run: |
-          kill $(cat app.pid) || true
+        run: kill $(cat app.pid) || true
