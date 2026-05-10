@@ -34,7 +34,7 @@ jobs:
           docker build -t ghcr.io/${{ github.repository }}/course-management:latest .
 
       - name: Run Trivy scan
-        uses: aquasecurity/trivy-action@0.24.0
+        uses: aquasecurity/trivy-action@master
         with:
           image-ref: ghcr.io/${{ github.repository }}/course-management:latest
           format: table
